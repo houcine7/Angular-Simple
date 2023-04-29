@@ -1,0 +1,26 @@
+<div>
+  <p>hero works!</p>
+  <h1>Yes siiiiiir !</h1>
+
+  <ul>
+    <li>{{ user.name }}</li>
+    <li>{{ user.username }}</li>
+    <li>{{ user.phone }}</li>
+  </ul>
+
+  <div>
+    <input type="text" [(ngModel)]="comment.message" />
+
+    <button (click)="addComment()">add comment</button>
+
+    <div *ngIf="comments.length > 0; else noComment">
+      <ul>
+        <li *ngFor="let c of comments">{{ c.id }} {{ c.message }}</li>
+      </ul>
+    </div>
+
+    <ng-template #noComment>
+      <p>the comment sections is empty for now try to add new comments</p>
+    </ng-template>
+  </div>
+</div>
