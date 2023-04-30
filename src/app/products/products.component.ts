@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-products',
@@ -13,10 +14,18 @@ export class ProductsComponent implements OnInit {
   error!: any;
   showConfirmBox: boolean = false;
   productId!: number;
+  searchFormGroup!: FormGroup;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
+    this.searchFormGroup = this.fb.group({
+      keyword: this.fb.control(null),
+    });
+
     this.getProducts();
   }
 
@@ -53,5 +62,36 @@ export class ProductsComponent implements OnInit {
         this.products = this.products.filter((p) => p.id != this.productId);
       },
     });
+  }
+
+  setProductPromotion(product: Product): void {
+    const promoted = product.promoted;
+
+    this.productService.setPromoted(product.id).subscribe({
+      next: (data) => {
+        product.promoted = !promoted;
+      },
+      error: (err) => {
+        console.log(err);
+        this.error = err;
+      },
+    });
+  }
+
+  // Search for products
+
+  handelSearch(): void {
+    if (this.searchFormGroup.value?.keyword != null) {
+      this.productService
+        .searchProducts(this.searchFormGroup.value?.keyword)
+        .subscribe({
+          next: (data) => {
+            this.products = data;
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+    }
   }
 }

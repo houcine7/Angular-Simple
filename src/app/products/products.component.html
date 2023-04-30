@@ -27,6 +27,28 @@
         <span class="w-25 h-2 border-bottom border-1"></span>
       </div>
     </div>
+
+    <form
+      [formGroup]="searchFormGroup"
+      class="d-flex mt-2 gap-2 align-items-center"
+    >
+      <label for="search input-group-text">Keyword</label>
+      <input
+        class="form-control me-2 w-50"
+        type="text"
+        id="search"
+        placeholder="Search"
+        formControlName="keyword"
+      />
+      <button
+        class="btn gap-1 justify-content-center d-flex btn-outline-dark"
+        type="submit"
+        (click)="handelSearch()"
+      >
+        Search <span><i class="bi-search d-inline-block"></i></span>
+      </button>
+    </form>
+
     <div class="card-body mt-3">
       <table class="table responsive-table">
         <thead>
@@ -44,6 +66,23 @@
             <td>{{ p.name }}</td>
             <td>{{ p.price }}</td>
             <td class="">{{ p.desc }}</td>
+
+            <td>
+              <i *ngIf="p.promoted" class="bi-check-circle-fill fs-5"></i>
+            </td>
+
+            <td>
+              <button
+                class="btn"
+                [ngClass]="
+                  p.promoted ? 'btn-outline-danger' : 'btn-outline-success'
+                "
+                (click)="setProductPromotion(p)"
+              >
+                <span *ngIf="!p.promoted">promote</span>
+                <span *ngIf="p.promoted"> unpromote </span>
+              </button>
+            </td>
             <td>
               <button
                 type="button"

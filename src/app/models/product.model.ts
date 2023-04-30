@@ -5,5 +5,7 @@ export interface Product {
 
   price: string;
 
+  promoted: boolean;
+
   desc?: string;
 }
