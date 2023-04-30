@@ -81,8 +81,6 @@ export class ProductsComponent implements OnInit {
     if (!this.isSearch) {
       this.getPageProducts();
     } else {
-      console.log(this.currentPage);
-
       this.handelSearch();
     }
   }

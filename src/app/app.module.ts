@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { HeroComponent } from './hero/hero.component';
 import { ProductsComponent } from './products/products.component';
 import { CustomerComponent } from './customer/customer.component';
+import { LoginComponent } from './auth/login/login.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,8 @@ import { CustomerComponent } from './customer/customer.component';
     HeroComponent,
     ProductsComponent,
     CustomerComponent,
+    LoginComponent,
+    NavBarComponent,
   ],
   imports: [
     // here where we decalre thr modules that we are usig
