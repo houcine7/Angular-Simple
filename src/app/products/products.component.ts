@@ -11,10 +11,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class ProductsComponent implements OnInit {
   //
   products!: Product[];
+  totalPages!: number;
+  currentPage: number = 0;
+  sizePages: number = 6;
   error!: any;
   showConfirmBox: boolean = false;
   productId!: number;
   searchFormGroup!: FormGroup;
+  isSearch: boolean = false;
 
   constructor(
     private productService: ProductService,
@@ -26,7 +30,7 @@ export class ProductsComponent implements OnInit {
       keyword: this.fb.control(null),
     });
 
-    this.getProducts();
+    this.getPageProducts();
   }
 
   // methods
@@ -34,6 +38,8 @@ export class ProductsComponent implements OnInit {
     this.productService.getProducts().subscribe({
       // NO ERROR :
       next: (data) => {
+        console.log(data);
+
         this.products = data;
       },
 
@@ -44,6 +50,41 @@ export class ProductsComponent implements OnInit {
 
       //
     });
+  }
+
+  getPageProducts(): void {
+    this.isSearch = false;
+
+    this.productService
+      .getProductPage(this.sizePages, this.currentPage)
+      .subscribe({
+        // NO ERROR :
+        next: (data) => {
+          console.log(data);
+
+          this.products = data.products;
+          this.totalPages = data.totalPages;
+        },
+
+        // AN ERROR OCCURED
+        error: (err) => {
+          this.error = err;
+        },
+
+        //
+      });
+  }
+
+  getPage(page: number): void {
+    this.currentPage = page;
+
+    if (!this.isSearch) {
+      this.getPageProducts();
+    } else {
+      console.log(this.currentPage);
+
+      this.handelSearch();
+    }
   }
 
   deleteProduct(id: number) {
@@ -81,17 +122,29 @@ export class ProductsComponent implements OnInit {
   // Search for products
 
   handelSearch(): void {
-    if (this.searchFormGroup.value?.keyword != null) {
+    this.isSearch = true;
+
+    if (
+      this.searchFormGroup.value?.keyword != null &&
+      this.searchFormGroup.value?.keyword != ''
+    ) {
       this.productService
-        .searchProducts(this.searchFormGroup.value?.keyword)
+        .searchProducts(
+          this.searchFormGroup.value?.keyword,
+          this.currentPage,
+          this.sizePages
+        )
         .subscribe({
           next: (data) => {
-            this.products = data;
+            this.products = data.products;
+            this.totalPages = data.totalPages;
           },
           error: (err) => {
             console.log(err);
           },
         });
+    } else {
+      this.getPageProducts();
     }
   }
 }

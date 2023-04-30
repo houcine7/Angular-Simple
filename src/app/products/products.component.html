@@ -96,6 +96,20 @@
         </tbody>
       </table>
     </div>
+
+    <ul
+      class="list-unstyled mt-3 d-flex justify-content-center gap-2 text-decoration-none"
+    >
+      <li *ngFor="let item of [].constructor(totalPages); let i = index">
+        <a
+          class="btn btn-outline-info"
+          [ngClass]="currentPage == i ? 'active' : ''"
+          (click)="getPage(i)"
+        >
+          {{ i }}</a
+        >
+      </li>
+    </ul>
   </div>
 </div>
 

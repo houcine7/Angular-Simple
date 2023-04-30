@@ -9,3 +9,13 @@ export interface Product {
 
   desc?: string;
 }
+
+export interface ProducatPage {
+  totalPages: number;
+
+  products: Product[];
+
+  size: number;
+
+  page: number;
+}

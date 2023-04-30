@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { Product } from '../models/product.model';
+import { ProducatPage, Product } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,24 @@ export class ProductService {
         desc: 'gaming is now more efficient and easier with our product',
       },
     ];
+
+    let counter = 3;
+    for (let i = 0; i < 10; i++) {
+      this.products.push({
+        id: ++counter,
+        name: 'Usb cable',
+        price: '20 MAD',
+        promoted: true,
+        desc: 'the cable that will never be changed',
+      });
+      this.products.push({
+        id: ++counter,
+        name: 'keynoard dragon fire 7',
+        price: '1500 MAD',
+        promoted: false,
+        desc: 'take control over colors and over sounds and speed of your keyboard',
+      });
+    }
   }
 
   //methods
@@ -42,6 +60,22 @@ export class ProductService {
     //return throwError(() => new Error("can't get products"));
     return of(this.products);
   };
+
+  getProductPage(size: number, page: number): Observable<ProducatPage> {
+    const start = size * page;
+    let totalPages = ~~(this.products.length / size);
+
+    if (totalPages % 2 != 0) totalPages++;
+
+    const pageProducts = this.products.slice(start, start + size);
+
+    return of({
+      products: pageProducts,
+      totalPages: totalPages,
+      size: size,
+      page: page,
+    });
+  }
 
   // delete product
 
@@ -64,11 +98,28 @@ export class ProductService {
   }
 
   //
-  searchProducts(keyword: string): Observable<Product[]> {
-    this.products = this.products = this.products.filter(
+  searchProducts(
+    keyword: string,
+    page: number,
+    size: number
+  ): Observable<ProducatPage> {
+    let start = page * size;
+
+    let filtred = this.products.filter(
       (p) => p.name.includes(keyword) || p.desc?.includes(keyword)
     );
 
-    return of(this.products);
+    console.log(start);
+
+    let totalPages = ~~(filtred.length / size);
+
+    if (filtred.length % size != 0) totalPages++;
+
+    return of({
+      page: page,
+      size: size,
+      products: filtred.slice(start, start + size),
+      totalPages: totalPages,
+    });
   }
 }
