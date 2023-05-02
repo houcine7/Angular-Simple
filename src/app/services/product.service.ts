@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { ProducatPage, Product } from '../models/product.model';
+import { ValidationErrors } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -63,15 +64,16 @@ export class ProductService {
 
   getProductPage(size: number, page: number): Observable<ProducatPage> {
     const start = size * page;
-    let totalPages = ~~(this.products.length / size);
+    let total = ~~(this.products.length / size);
+    console.log(this.products.length + '----' + total);
 
-    if (totalPages % 2 != 0) totalPages++;
+    if (this.products.length % size != 0) total++;
 
     const pageProducts = this.products.slice(start, start + size);
 
     return of({
       products: pageProducts,
-      totalPages: totalPages,
+      totalPages: total,
       size: size,
       page: page,
     });
@@ -95,6 +97,18 @@ export class ProductService {
     });
 
     return of(true);
+  }
+
+  //
+
+  getProduct(id: number): Observable<Product> {
+    //
+    let pr = this.products.find((p) => p.id == id);
+
+    if (pr != undefined) {
+      return of(pr);
+    }
+    return throwError(() => new Error('Product not found'));
   }
 
   //
@@ -122,4 +136,44 @@ export class ProductService {
       totalPages: totalPages,
     });
   }
+
+  addProduct = (product: Product): Observable<Product> => {
+    product.id = this.products.length + 1;
+
+    this.products.push(product);
+    console.log(this.products);
+
+    return of(product);
+  };
+
+  //update product
+
+  updateProduct = (product: Product): Observable<boolean> => {
+    //
+
+    this.products = this.products.map((p) => {
+      if (p.id == product.id) {
+        return product;
+      } else {
+        return p;
+      }
+    });
+
+    return of(true);
+  };
+
+  //
+  desplayedError = (field: string, error: ValidationErrors): string => {
+    console.log(error);
+
+    if (error['required']) return field + ' is required';
+    else if (error['minlength'])
+      return (
+        field +
+        ' must be at least ' +
+        error['minlength']['requiredLength'] +
+        ' characters'
+      );
+    else return '';
+  };
 }

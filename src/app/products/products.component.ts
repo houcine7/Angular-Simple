@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-products',
@@ -19,11 +20,15 @@ export class ProductsComponent implements OnInit {
   productId!: number;
   searchFormGroup!: FormGroup;
   isSearch: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(
     private productService: ProductService,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private authService: AuthenticationService
+  ) {
+    this.isAdmin = this.authService.hasRole('ADMIN');
+  }
 
   ngOnInit(): void {
     this.searchFormGroup = this.fb.group({
@@ -53,6 +58,8 @@ export class ProductsComponent implements OnInit {
   }
 
   getPageProducts(): void {
+    console.log('heeere');
+
     this.isSearch = false;
 
     this.productService

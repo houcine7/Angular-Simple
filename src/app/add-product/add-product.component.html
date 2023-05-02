@@ -1,0 +1,84 @@
+<div class="row justify-content-center mt-5 mx-auto col-6">
+  <form class="form-control rounded-4 py-3" [formGroup]="addProFromGrp">
+    <div class="form-group col-lg-7 mb-1">
+      <label for="name" class="form-label">name *</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        formControlName="name"
+      />
+      <small
+        class="text-danger"
+        *ngIf="
+          addProFromGrp.controls['name'].errors &&
+          addProFromGrp.controls['name'].touched
+        "
+        >{{
+          desplayedError("Name", addProFromGrp.controls["name"].errors)
+        }}</small
+      >
+    </div>
+
+    <div class="form-group col-lg-7 mb-1">
+      <label for="price" class="form-label">price *</label>
+      <div class="input-group">
+        <input
+          type="number"
+          id="price"
+          class="form-control"
+          formControlName="price"
+        />
+        <label class="input-group-text">MAD</label>
+      </div>
+      <small
+        class="text-danger"
+        *ngIf="
+          addProFromGrp.controls['price'].errors &&
+          addProFromGrp.controls['price'].touched
+        "
+        >{{
+          desplayedError("Price", addProFromGrp.controls["price"].errors)
+        }}</small
+      >
+    </div>
+
+    <div class="form-group col-lg-7 mb-1">
+      <label for="desc" class="form-label">decscription </label>
+      <input
+        type="text"
+        id="desc"
+        class="form-control"
+        formControlName="desc"
+      />
+      <small
+        class="text-danger"
+        *ngIf="
+          addProFromGrp.controls['desc'].errors &&
+          addProFromGrp.controls['desc'].touched
+        "
+        >{{
+          desplayedError("Description", addProFromGrp.controls["desc"].errors)
+        }}</small
+      >
+    </div>
+
+    <div class="form-group col-lg-7 mb-1 d-flex gap-2 align-items-center">
+      <label for="promoted" class="form-label m-0">promoted </label>
+      <input
+        type="checkbox"
+        id="promoted"
+        class="form-check-inline form-check"
+        formControlName="promoted"
+      />
+    </div>
+
+    <button
+      class="btn btn-outline-danger btn-block fw-bold"
+      [disabled]="!addProFromGrp.valid"
+      (click)="handelSubmit()"
+    >
+      save <span class="bi-save-fill"></span>
+    </button>
+  </form>
+</div>

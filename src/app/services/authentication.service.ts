@@ -8,19 +8,19 @@ import { Observable, of, throwError } from 'rxjs';
 export class AuthenticationService {
   users: User[] = [];
 
-  authenticatedUser!: User;
+  authenticatedUser: User | undefined;
 
   constructor() {
     this.users.push({
       username: 'user1',
       password: 'password',
-      roles: ['user'],
+      roles: ['USER'],
       id: 752102,
     });
     this.users.push({
       username: 'admin',
       password: 'password',
-      roles: ['user', 'admin'],
+      roles: ['USER', 'ADMIN'],
       id: 564791,
     });
   }
@@ -56,10 +56,25 @@ export class AuthenticationService {
   }
 
   hasRole(role: string): boolean {
-    return this.authenticatedUser?.roles.includes(role);
+    if (this.authenticatedUser?.roles.includes(role)) return true;
+    else return false;
   }
 
   isAuthenticated(): boolean {
-    return this.authenticatedUser != undefined;
+    if (localStorage.getItem('user') != null) {
+      this.authenticatedUser = this.users.find(
+        (user) =>
+          user.username == JSON.parse(localStorage.getItem('user')!).username
+      );
+      return true;
+    }
+
+    return false;
+  }
+
+  logout(): boolean {
+    this.authenticatedUser = undefined;
+    localStorage.removeItem('user');
+    return true;
   }
 }

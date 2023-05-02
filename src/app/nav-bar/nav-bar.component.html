@@ -35,16 +35,22 @@
             Menu
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Products</a></li>
+            <li>
+              <a class="dropdown-item" routerLink="/products">Products</a>
+            </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Clients</a></li>
+            <li><a class="dropdown-item" routerLink="/clients">Clients</a></li>
           </ul>
         </li>
       </ul>
 
-      <div class="nav-rigth d-flex gap-2 fs-3 text-white">
-        <i class="bi-facebook"></i>
-        <i class="bi-linkedin"></i>
+      <div class="nav-rigth d-flex gap-2 fs-3 text-white align-items-center">
+        <div class="d-flex gap-3 align-items-center">
+          <p class="fw-semibold fs-6 m-0 cursor-pointer">
+            {{ authenticatedUser?.username }}
+          </p>
+          <i class="bi-box-arrow-left fs-3" (click)="logout()"></i>
+        </div>
       </div>
     </div>
   </div>

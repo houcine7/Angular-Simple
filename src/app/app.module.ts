@@ -9,6 +9,8 @@ import { ProductsComponent } from './products/products.component';
 import { CustomerComponent } from './customer/customer.component';
 import { LoginComponent } from './auth/login/login.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { AddProductComponent } from './add-product/add-product.component';
+import { EditProductComponent } from './edit-product/edit-product.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     CustomerComponent,
     LoginComponent,
     NavBarComponent,
+    AddProductComponent,
+    EditProductComponent,
   ],
   imports: [
     // here where we decalre thr modules that we are usig
